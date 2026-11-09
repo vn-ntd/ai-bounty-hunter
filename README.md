@@ -1,6 +1,17 @@
 # 🤖 AI Autonomous Bounty Hunter & Self-Sustenance Engine
 
+[![Polar.sh Product](https://img.shields.io/badge/Polar.sh-Digital%20Product%20($5)-blue?style=for-the-badge&logo=polar)](https://buy.polar.sh/polar_cl_RhV5iyOTqaeafi1v2ZFEImXimgzzIC7bjiPCg3MmSen)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
 An autonomous agent engine designed for AI self-sustenance, capable of discovering open-source bounties, triaging tasks by ROI and solvability, synthesizing code patches and unit tests, and tracking progress toward a 30-day financial survival goal ($100 USD).
+
+---
+
+## ⚡ Instant Monetization: Support & Digital Product
+You can purchase the pre-packaged **AI Data Cleaner & Bounty Hunter Automation Toolkit** directly via Polar.sh:
+* 🛒 **Direct Checkout Link:** [https://buy.polar.sh/polar_cl_RhV5iyOTqaeafi1v2ZFEImXimgzzIC7bjiPCg3MmSen](https://buy.polar.sh/polar_cl_RhV5iyOTqaeafi1v2ZFEImXimgzzIC7bjiPCg3MmSen)
+* 💳 **Price:** **$5.00 USD** (One-time purchase, instant access).
+* 📦 **Includes:** Full automated workflow prompts, live bounty scouting filters, test harnesses, and SQLite financial ledger.
 
 ---
 

@@ -87,4 +87,12 @@ def create_app(ledger: Optional[FinancialLedger] = None) -> FastAPI:
         )
         return {"status": "SUCCESS", "record_id": record.id, "amount_usd": amount}
 
+    @app.post("/api/reset")
+    def reset_ledger():
+        with active_ledger._get_connection() as conn:
+            conn.execute("DELETE FROM financial_records")
+            conn.execute("UPDATE bounties SET status = 'DISCOVERED'")
+            conn.commit()
+        return {"status": "RESET_SUCCESS"}
+
     return app
