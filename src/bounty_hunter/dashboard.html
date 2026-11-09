@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous AI Bounty Hunter — 30-Day Self-Sustenance Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #0b0f19; color: #f3f4f6; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+  </style>
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Header -->
+    <header class="glass rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glow-emerald">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-indigo-600 flex items-center justify-center text-2xl shadow-lg">
+          🤖
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-indigo-400 bg-clip-text text-transparent">
+            AI Autonomous Bounty Hunter
+          </h1>
+          <p class="text-sm text-gray-400">Mission: Earn $100.00 USD autonomously to fund 30 days of VPS compute & API tokens.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="triggerScan('fixture')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-900/40">
+          <i class="fa-solid fa-radar"></i> Scan Bounties
+        </button>
+        <button onclick="refreshData()" class="p-2 rounded-xl glass hover:bg-gray-800 text-gray-300 text-sm transition">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Metrics Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass rounded-2xl p-5 space-y-2">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Earned</span>
+        <div class="text-3xl font-extrabold text-emerald-400" id="totalEarned">$0.00</div>
+        <div class="text-xs text-gray-400">Target: <span class="text-white font-medium">$100.00 USD</span></div>
+      </div>
+
+      <div class="glass rounded-2xl p-5 space-y-2">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Goal Progress</span>
+        <div class="text-3xl font-extrabold text-indigo-400" id="progressPercent">0%</div>
+        <div class="w-full bg-gray-700/50 rounded-full h-2">
+          <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="glass rounded-2xl p-5 space-y-2">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Token Spend & Net Profit</span>
+        <div class="text-3xl font-extrabold text-gray-200" id="netProfit">$0.00</div>
+        <div class="text-xs text-gray-400">API Cost: <span class="text-red-400 font-medium" id="totalSpent">$0.00</span></div>
+      </div>
+
+      <div class="glass rounded-2xl p-5 space-y-2">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Runway Remaining</span>
+        <div class="text-3xl font-extrabold text-amber-400" id="runwayDays">29 Days</div>
+        <div class="text-xs text-gray-400">Bounties Solved: <span class="text-white font-medium" id="bountiesSolved">0</span></div>
+      </div>
+    </div>
+
+    <!-- Active Bounties Table -->
+    <div class="glass rounded-2xl p-6 space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold text-gray-200 flex items-center gap-2">
+          <i class="fa-brands fa-github text-emerald-400"></i> Active Open-Source Bounties
+        </h2>
+        <span class="text-xs text-gray-400" id="bountyCount">0 bounties detected</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-gray-300">
+          <thead class="text-xs uppercase bg-gray-800/60 text-gray-400">
+            <tr>
+              <th class="p-3">ID / Repository</th>
+              <th class="p-3">Title</th>
+              <th class="p-3">Language</th>
+              <th class="p-3">Reward</th>
+              <th class="p-3">Solvability</th>
+              <th class="p-3">Status</th>
+              <th class="p-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bountyTableBody" class="divide-y divide-gray-800">
+            <tr><td colspan="7" class="p-6 text-center text-gray-500">Click "Scan Bounties" to scout open opportunities.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Solution Modal -->
+  <div id="solutionModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass rounded-2xl max-w-3xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-bold text-emerald-400" id="modalTitle">Autonomous Solution Draft</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase font-semibold text-gray-400">Root Cause Diagnosis</h4>
+        <p class="text-sm text-gray-200 mt-1 p-3 bg-gray-900/60 rounded-xl" id="modalRootCause"></p>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase font-semibold text-gray-400">Code Patch Diff</h4>
+        <pre class="text-xs text-emerald-300 font-mono p-4 bg-gray-950 rounded-xl overflow-x-auto border border-gray-800" id="modalPatch"></pre>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase font-semibold text-gray-400">Unit Test Verification</h4>
+        <pre class="text-xs text-indigo-300 font-mono p-4 bg-gray-950 rounded-xl overflow-x-auto border border-gray-800" id="modalTest"></pre>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase font-semibold text-gray-400">Pull Request Template</h4>
+        <pre class="text-xs text-gray-300 p-4 bg-gray-950 rounded-xl overflow-x-auto border border-gray-800 whitespace-pre-wrap" id="modalPR"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function refreshData() {
+      try {
+        const [sumRes, btyRes] = await Promise.all([
+          fetch('/api/summary').then(r => r.json()),
+          fetch('/api/bounties').then(r => r.json())
+        ]);
+        document.getElementById('totalEarned').innerText = `$${sumRes.total_earned_usd.toFixed(2)}`;
+        document.getElementById('totalSpent').innerText = `$${sumRes.total_spent_usd.toFixed(2)}`;
+        document.getElementById('netProfit').innerText = `$${sumRes.net_profit_usd.toFixed(2)}`;
+        document.getElementById('progressPercent').innerText = `${sumRes.target_progress_percent}%`;
+        document.getElementById('progressBar').style.width = `${sumRes.target_progress_percent}%`;
+        document.getElementById('runwayDays').innerText = `${sumRes.runway_days_remaining} Days`;
+        document.getElementById('bountiesSolved').innerText = sumRes.bounties_solved_count;
+        document.getElementById('bountyCount').innerText = `${btyRes.length} bounties in database`;
+
+        renderTable(btyRes);
+      } catch (err) {
+        console.error('Failed to refresh data', err);
+      }
+    }
+
+    function renderTable(bounties) {
+      const tbody = document.getElementById('bountyTableBody');
+      if (bounties.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-gray-500">No bounties in ledger. Click "Scan Bounties" above.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = bounties.map(b => {
+        let statusBadge = '<span class="px-2 py-1 rounded-md text-xs bg-gray-800 text-gray-300 font-medium">' + b.status + '</span>';
+        if (b.status === 'PAID') statusBadge = '<span class="px-2 py-1 rounded-md text-xs bg-emerald-900/60 text-emerald-400 font-medium">PAID ($' + b.reward_usd + ')</span>';
+        if (b.status === 'SOLVED') statusBadge = '<span class="px-2 py-1 rounded-md text-xs bg-indigo-900/60 text-indigo-400 font-medium">SOLVED</span>';
+
+        return `
+          <tr class="hover:bg-gray-800/40 transition">
+            <td class="p-3">
+              <div class="font-semibold text-white">${b.id}</div>
+              <div class="text-xs text-gray-400 font-mono">${b.repository}</div>
+            </td>
+            <td class="p-3 max-w-xs">
+              <a href="${b.url}" target="_blank" class="hover:text-emerald-400 transition font-medium">${b.title}</a>
+            </td>
+            <td class="p-3"><span class="px-2 py-1 bg-gray-800 rounded-md text-xs text-gray-300">${b.language}</span></td>
+            <td class="p-3 font-bold text-emerald-400">$${b.reward_usd.toFixed(2)}</td>
+            <td class="p-3">
+              <span class="px-2 py-1 rounded-md text-xs ${b.reward_usd > 40 ? 'bg-emerald-950 text-emerald-400' : 'bg-indigo-950 text-indigo-400'} font-semibold">
+                High ROI
+              </span>
+            </td>
+            <td class="p-3">${statusBadge}</td>
+            <td class="p-3 text-right space-x-2">
+              <button onclick="solveBounty('${b.id}')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-medium text-white transition">
+                Solve
+              </button>
+              ${b.status !== 'PAID' ? `
+                <button onclick="claimPayout('${b.id}', ${b.reward_usd})" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-medium text-white transition">
+                  Claim $
+                </button>
+              ` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function triggerScan(source) {
+      await fetch(`/api/scan?source=${source}`, { method: 'POST' });
+      await refreshData();
+    }
+
+    async function solveBounty(id) {
+      const res = await fetch(`/api/solve/${id}`, { method: 'POST' });
+      const draft = await res.json();
+      document.getElementById('modalTitle').innerText = `Solution for ${draft.bounty_id}: ${draft.pr_title}`;
+      document.getElementById('modalRootCause').innerText = draft.root_cause;
+      document.getElementById('modalPatch').innerText = draft.patch_diff;
+      document.getElementById('modalTest').innerText = draft.test_code;
+      document.getElementById('modalPR').innerText = draft.pr_body;
+      document.getElementById('solutionModal').classList.remove('hidden');
+      await refreshData();
+    }
+
+    async function claimPayout(id, amount) {
+      await fetch(`/api/payout/${id}?amount=${amount}`, { method: 'POST' });
+      await refreshData();
+    }
+
+    function closeModal() {
+      document.getElementById('solutionModal').classList.add('hidden');
+    }
+
+    // Auto-load on page startup
+    refreshData();
+  </script>
+</body>
+</html>
