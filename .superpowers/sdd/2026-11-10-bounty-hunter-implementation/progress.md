@@ -6,3 +6,4 @@ Task 2: complete (commit c5b639c, tests: pytest tests/test_scanners.py -> 3 pass
 Task 3: complete (commit a23442c, tests: pytest tests/test_triage.py -> 3 passed)
 Task 4: complete (commit cd4f09d, tests: pytest tests/test_solver.py -> 3 passed)
 Task 5: complete (commit 296d708, tests: pytest tests/test_ledger.py -> 3 passed)
+Task 6: complete (commit 0eb01cb, tests: pytest tests/test_cli_server.py -> 3 passed, full suite 20 passed)
