@@ -2,3 +2,4 @@
 
 Pre-flight: Interfaces scanned. All models, scanners, triage, solver, and ledger interfaces align cleanly.
 Task 1: complete (commit 1bcf5a0, tests: pytest tests/test_models.py -> 5 passed)
+Task 2: complete (commit c5b639c, tests: pytest tests/test_scanners.py -> 3 passed)
