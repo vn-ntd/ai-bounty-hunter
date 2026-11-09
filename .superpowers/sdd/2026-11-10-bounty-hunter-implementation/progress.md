@@ -1,3 +1,4 @@
 # SDD ledger — plan: docs/superpowers/plans/2026-11-10-bounty-hunter-implementation.md
 
 Pre-flight: Interfaces scanned. All models, scanners, triage, solver, and ledger interfaces align cleanly.
+Task 1: complete (commit 1bcf5a0, tests: pytest tests/test_models.py -> 5 passed)
